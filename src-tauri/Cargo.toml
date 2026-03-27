@@ -29,7 +29,7 @@ license-file = ["LICENSE", "0"]
 extended-description = """A distraction-free gothic notepad with an immersive \
 ouija board virtual keyboard. Features interactive planchette animation, \
 dual input modes (mouse and physical keyboard), and persistent local storage."""
-depends = "$auto"
+depends = "libgtk-3-0, libwebkit2gtk-4.1-0, libappindicator3-1, libjavascriptcoregtk-4.1-0"
 section = "utils"
 priority = "optional"
 assets = [
