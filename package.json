@@ -1,22 +1,23 @@
 {
-  "name": "lilith-notepad",
+  "name": "ouija-pad",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Infernal notepad with ouija board virtual keyboard for Lilith Linux",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/BlancoBAM/Lilith-Virtual-Keyboard.git"
+    "url": "git+https://github.com/BlancoBAM/ouija-pad.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["ouija", "notepad", "gothic", "keyboard", "lilith-linux"],
+  "author": "Lilith Linux Team",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/BlancoBAM/Lilith-Virtual-Keyboard/issues"
+    "url": "https://github.com/BlancoBAM/ouija-pad/issues"
   },
-  "homepage": "https://github.com/BlancoBAM/Lilith-Virtual-Keyboard#readme",
+  "homepage": "https://github.com/BlancoBAM/ouija-pad#readme",
   "devDependencies": {
     "@tauri-apps/cli": "^2.10.1"
   }

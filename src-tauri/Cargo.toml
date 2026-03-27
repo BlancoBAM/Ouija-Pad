@@ -1,17 +1,15 @@
 [package]
-name = "app"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
-license = ""
-repository = ""
+name = "ouija-pad"
+version = "1.0.0"
+description = "Infernal notepad with ouija board virtual keyboard for Lilith Linux"
+authors = ["Lilith Linux Team"]
+license = "MIT"
+repository = "https://github.com/BlancoBAM/ouija-pad"
 edition = "2021"
 rust-version = "1.77.2"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [lib]
-name = "app_lib"
+name = "ouija_pad_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
 [build-dependencies]
@@ -23,3 +21,26 @@ serde = { version = "1.0", features = ["derive"] }
 log = "0.4"
 tauri = { version = "2.10.3", features = [] }
 tauri-plugin-log = "2"
+
+[package.metadata.deb]
+maintainer = "Lilith Linux Team"
+copyright = "2026, Lilith Linux Team"
+license-file = ["LICENSE", "0"]
+extended-description = """A distraction-free gothic notepad with an immersive \
+ouija board virtual keyboard. Features interactive planchette animation, \
+dual input modes (mouse and physical keyboard), and persistent local storage."""
+depends = "$auto"
+section = "utils"
+priority = "optional"
+assets = [
+    ["target/release/ouija-pad", "usr/bin/", "755"],
+    ["../ouija-pad.desktop", "usr/share/applications/", "644"],
+    ["src-tauri/icons/128x128.png", "usr/share/icons/hicolor/128x128/apps/ouija-pad.png", "644"],
+]
+
+[package.metadata.generate-rpm]
+assets = [
+    { source = "target/release/ouija-pad", dest = "/usr/bin/ouija-pad", mode = "755" },
+    { source = "../ouija-pad.desktop", dest = "/usr/share/applications/ouija-pad.desktop", mode = "644" },
+    { source = "src-tauri/icons/128x128.png", dest = "/usr/share/icons/hicolor/128x128/apps/ouija-pad.png", mode = "644" },
+]

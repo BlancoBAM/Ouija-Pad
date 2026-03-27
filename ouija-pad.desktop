@@ -1,0 +1,12 @@
+[Desktop Entry]
+Name=Ouija Pad
+GenericName=Infernal Notepad
+Comment=Distraction-free gothic notepad with ouija board keyboard
+Exec=ouija-pad
+Icon=ouija-pad
+Terminal=false
+Type=Application
+Categories=Office;Utility;TextEditor;
+Keywords=ouija;notepad;writing;gothic;keyboard;
+StartupNotify=true
+Version=1.0
