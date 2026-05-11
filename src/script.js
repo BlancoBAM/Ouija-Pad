@@ -93,7 +93,7 @@
   // ---- FILE STATE ----
   let currentFilePath = null;
   let isDirty = false;
-  const invoke = window.__TAURI__?.core?.invoke;
+  const invoke = window.__TAURI__?.core?.invoke || window.__TAURI__?.invoke;
 
   function getFileName(filePath) {
     if (!filePath) return null;
@@ -339,15 +339,26 @@
 
   // ---- INIT ----
   function init() {
+    console.log("Ouija Pad initializing...");
     createHotspots();
     loadSavedNotebook();
     textarea.focus();
   }
 
+  // Run init immediately for UI parts, but board hotspots need the image size/load
   const img = document.getElementById('board-image');
-  if (img.complete) {
+  if (img && img.complete) {
     init();
-  } else {
+  } else if (img) {
+    // If image fails or takes time, we still want the editor to work
     img.addEventListener('load', init);
+    img.addEventListener('error', () => {
+      console.error("Board image failed to load.");
+      init(); 
+    });
+    // Safety timeout to ensure app becomes interactive even if image hangs
+    setTimeout(init, 2000);
+  } else {
+    init();
   }
 })();
