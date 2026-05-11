@@ -53,7 +53,7 @@ sudo dpkg -i ouija-pad_*_amd64.deb
 sudo apt-get install -f        # resolve dependencies if needed
 ```
 
-### AppImage (any Linux distro)
+### A̶p̶p̶I̶m̶a̶g̶e̶ (NOT WORKING-Ive left it so that someone can fix it if they care to install it outside of Lilith)
 ```bash
 chmod +x Ouija-Pad_*_x86_64.AppImage
 ./Ouija-Pad_*_x86_64.AppImage
@@ -196,6 +196,6 @@ See [LICENSE](LICENSE) for full text.
 
 **Channel your thoughts from beyond...** 🕯️
 
-Made with 🖤 for writers who dare to explore the shadows
+Made for Lilith Linux
 
 </div>
