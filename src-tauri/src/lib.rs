@@ -88,9 +88,23 @@ pub fn run() {
                         .build(),
                 )?;
             }
+
+            // Set the window icon from the bundled PNG bytes
+            #[cfg(target_os = "linux")]
+            {
+                use tauri::Manager;
+                if let Some(window) = app.get_webview_window("main") {
+                    let icon_bytes = include_bytes!("../icons/128x128.png");
+                    if let Ok(icon) = tauri::image::Image::from_bytes(icon_bytes) {
+                        let _ = window.set_icon(icon);
+                    }
+                }
+            }
+
             Ok(())
         })
         .invoke_handler(tauri::generate_handler![open_file, save_file, save_file_as])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
+
