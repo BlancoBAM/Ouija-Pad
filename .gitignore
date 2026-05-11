@@ -1,21 +1,26 @@
-# Logs
-logs
-*.log
+# ---- Node ----
+node_modules/
+dist/
+dist-ssr/
+*.local
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# ---- Rust / Tauri ----
+src-tauri/target/
+src-tauri/gen/
 
-# Editor directories and files
+# ---- Build artifacts ----
+*.deb
+*.rpm
+*.AppImage
+
+# ---- IDE / Editor ----
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
 *.suo
 *.ntvs*
@@ -23,11 +28,15 @@ dist-ssr
 *.sln
 *.sw?
 
-# Tauri
-src-tauri/target
-src-tauri/gen
+# ---- AI / Agent tooling ----
+.claude/
+.cursor/
+.kilocode/
+.vibecheck/
+.gemini/
+.copilot/
+CLAUDE.md
+/workflows/
 
-# Build artifacts
-*.deb
-*.rpm
-*.AppImage
+# ---- GitHub Copilot instructions (internal) ----
+.github/copilot-instructions.md

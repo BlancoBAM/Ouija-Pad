@@ -14,28 +14,32 @@ env:
 
 jobs:
   build-linux:
+    name: Build Linux Packages
     runs-on: ubuntu-22.04
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # ── Toolchains ─────────────────────────────────────────────────────────
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
 
-      - name: Install Rust
+      - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
           targets: x86_64-unknown-linux-gnu
 
-      - name: Install dependencies
+      # ── System dependencies (WebKit2GTK + AppImage) ────────────────────────
+      - name: Install system dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y \
             libgtk-3-dev \
-            libwebkit2gtk-4.0-dev \
+            libwebkit2gtk-4.1-dev \
             libappindicator3-dev \
             librsvg2-dev \
             libssl-dev \
@@ -43,22 +47,13 @@ jobs:
             libxdo-dev \
             wget \
             file \
+            fuse \
+            libfuse2 \
             desktop-file-utils \
-            libfuse2
+            patchelf
 
-      - name: Install cargo-deb
-        run: cargo install cargo-deb
-
-      - name: Install cargo-generate-rpm
-        run: cargo install cargo-generate-rpm
-
-      - name: Install AppImage tools
-        run: |
-          wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
-          chmod +x appimagetool-x86_64.AppImage
-          sudo mv appimagetool-x86_64.AppImage /usr/local/bin/appimagetool
-
-      - name: Cache cargo
+      # ── Cargo cache ────────────────────────────────────────────────────────
+      - name: Cache Cargo registry & build
         uses: actions/cache@v4
         with:
           path: |
@@ -66,72 +61,134 @@ jobs:
             ~/.cargo/git
             src-tauri/target
           key: ${{ runner.os }}-cargo-${{ hashFiles('src-tauri/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-
 
+      # ── Cargo packaging tools ──────────────────────────────────────────────
+      - name: Install cargo-deb
+        run: cargo install cargo-deb --locked
+
+      # ── Node deps ──────────────────────────────────────────────────────────
       - name: Install Node dependencies
         run: npm ci
 
-      - name: Build Tauri app
-        run: npm run tauri:build -- --bundles all
+      # ── Build ──────────────────────────────────────────────────────────────
+      - name: Build Tauri application (deb + AppImage)
+        run: npm run tauri:build -- --bundles deb,appimage
+        env:
+          WEBKIT_DISABLE_DMABUF_RENDERER: 1
 
-      - name: Build .deb package
+      - name: Build .deb via cargo-deb
+        working-directory: src-tauri
+        run: cargo deb --no-build
+
+      # ── Collect artifacts ──────────────────────────────────────────────────
+      - name: List build output
         run: |
-          cd src-tauri
-          cargo deb --no-build
-          cd ..
+          echo "=== Tauri bundle output ==="
+          find src-tauri/target/release/bundle -type f 2>/dev/null || true
+          echo "=== cargo-deb output ==="
+          find src-tauri/target/debian -type f 2>/dev/null || true
 
-      - name: Build .rpm package
+      - name: Rename artifacts for release
+        if: startsWith(github.ref, 'refs/tags/')
         run: |
-          cd src-tauri
-          cargo generate-rpm --no-build
-          cd ..
+          VERSION="${GITHUB_REF_NAME#v}"
+          DEB=$(find src-tauri/target/debian -name "*.deb" | head -1)
+          APPIMG=$(find src-tauri/target/release/bundle/appimage -name "*.AppImage" | head -1)
+          if [ -n "$DEB" ]; then
+            cp "$DEB" "ouija-pad_${VERSION}_amd64.deb"
+          fi
+          if [ -n "$APPIMG" ]; then
+            cp "$APPIMG" "Ouija-Pad_${VERSION}_x86_64.AppImage"
+          fi
+          ls -lh ouija-pad* Ouija-Pad* 2>/dev/null || true
 
-      - name: List build artifacts
-        run: |
-          find src-tauri/target/release/bundle -type f || true
-          find src-tauri/target/debian -type f || true
-          find src-tauri/target/generate-rpm -type f || true
-
+      # ── Upload artifacts (always, for branch builds) ───────────────────────
       - name: Upload .deb artifact
         uses: actions/upload-artifact@v4
-        if: startsWith(github.ref, 'refs/tags/')
         with:
           name: ouija-pad-deb
-          path: src-tauri/target/debian/*.deb
-
-      - name: Upload .rpm artifact
-        uses: actions/upload-artifact@v4
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          name: ouija-pad-rpm
-          path: src-tauri/target/generate-rpm/*.rpm
+          path: |
+            src-tauri/target/debian/*.deb
+          if-no-files-found: warn
+          retention-days: 7
 
       - name: Upload AppImage artifact
         uses: actions/upload-artifact@v4
-        if: startsWith(github.ref, 'refs/tags/')
         with:
           name: ouija-pad-appimage
-          path: src-tauri/target/release/bundle/appimage/*.AppImage
+          path: |
+            src-tauri/target/release/bundle/appimage/*.AppImage
+          if-no-files-found: warn
+          retention-days: 7
 
-  create-release:
+  # ── GitHub Release (tags only) ────────────────────────────────────────────
+  release:
+    name: Create GitHub Release
     needs: build-linux
     runs-on: ubuntu-22.04
     if: startsWith(github.ref, 'refs/tags/')
-    
+    permissions:
+      contents: write
+
     steps:
-      - name: Download all artifacts
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download .deb artifact
         uses: actions/download-artifact@v4
         with:
-          path: artifacts
+          name: ouija-pad-deb
+          path: dist/
 
-      - name: Create Release
-        uses: softprops/action-gh-release@v1
+      - name: Download AppImage artifact
+        uses: actions/download-artifact@v4
         with:
+          name: ouija-pad-appimage
+          path: dist/
+
+      - name: Rename release assets
+        run: |
+          VERSION="${GITHUB_REF_NAME#v}"
+          cd dist
+          for f in *.deb; do
+            [ -e "$f" ] && mv "$f" "ouija-pad_${VERSION}_amd64.deb"
+          done
+          for f in *.AppImage; do
+            [ -e "$f" ] && mv "$f" "Ouija-Pad_${VERSION}_x86_64.AppImage"
+          done
+          ls -lh
+
+      - name: Publish GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: "Ouija Pad ${{ github.ref_name }}"
+          body: |
+            ## 🔮 Ouija Pad ${{ github.ref_name }}
+
+            ### Installation
+
+            #### Debian / Ubuntu (.deb)
+            ```bash
+            sudo dpkg -i ouija-pad_*_amd64.deb
+            sudo apt-get install -f
+            ```
+
+            #### AppImage (any Linux distro)
+            ```bash
+            chmod +x Ouija-Pad_*_x86_64.AppImage
+            ./Ouija-Pad_*_x86_64.AppImage
+            ```
+
+            ---
+            *Full changelog auto-generated below.*
           files: |
-            artifacts/ouija-pad-deb/*.deb
-            artifacts/ouija-pad-rpm/*.rpm
-            artifacts/ouija-pad-appimage/*.AppImage
+            dist/*.deb
+            dist/*.AppImage
           generate_release_notes: true
           draft: false
           prerelease: false
+          fail_on_unmatched_files: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

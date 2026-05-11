@@ -89,6 +89,80 @@
 
   // ---- LOCAL STORAGE ----
   const STORAGE_KEY = 'ouija_notepad_content';
+
+  // ---- FILE STATE ----
+  let currentFilePath = null;
+  let isDirty = false;
+  const invoke = window.__TAURI__?.core?.invoke;
+
+  function getFileName(filePath) {
+    if (!filePath) return null;
+    return filePath.split('/').pop().split('\\').pop();
+  }
+
+  function updateTitleBar() {
+    const fileNameEl = document.getElementById('file-name');
+    if (!fileNameEl) return;
+    const name = getFileName(currentFilePath);
+    fileNameEl.textContent = name
+      ? (isDirty ? '• ' : '') + name
+      : (isDirty ? '• Untitled' : '');
+  }
+
+  function markDirty() {
+    if (!isDirty) { isDirty = true; updateTitleBar(); }
+  }
+
+  function markClean() {
+    isDirty = false;
+    updateTitleBar();
+  }
+
+  async function openFile() {
+    if (!invoke) { console.warn('Tauri invoke not available'); return; }
+    if (isDirty && !confirm('You have unsaved changes. Open a new file anyway?')) return;
+    try {
+      const result = await invoke('open_file');
+      if (result) {
+        textarea.value = result.content;
+        currentFilePath = result.path;
+        localStorage.setItem(STORAGE_KEY, textarea.value);
+        markClean();
+        textarea.focus();
+      }
+    } catch (err) {
+      console.error('Failed to open file:', err);
+    }
+  }
+
+  async function saveFile() {
+    if (!invoke) return;
+    if (!currentFilePath) { return saveFileAs(); }
+    try {
+      await invoke('save_file', { path: currentFilePath, content: textarea.value });
+      markClean();
+    } catch (err) {
+      console.error('Failed to save file:', err);
+    }
+  }
+
+  async function saveFileAs() {
+    if (!invoke) return;
+    const defaultName = getFileName(currentFilePath) || 'untitled.txt';
+    try {
+      const newPath = await invoke('save_file_as', {
+        content: textarea.value,
+        defaultName,
+      });
+      if (newPath) {
+        currentFilePath = newPath;
+        markClean();
+      }
+    } catch (err) {
+      console.error('Failed to save file as:', err);
+    }
+  }
+
   function loadSavedNotebook() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
@@ -98,13 +172,29 @@
 
   textarea.addEventListener('input', () => {
     localStorage.setItem(STORAGE_KEY, textarea.value);
+    markDirty();
   });
+
+  document.getElementById('btn-open').addEventListener('click', openFile);
+  document.getElementById('btn-save').addEventListener('click', saveFile);
+  document.getElementById('btn-save-as').addEventListener('click', saveFileAs);
 
   document.getElementById('btn-clear').addEventListener('click', () => {
     if (confirm("Are you sure you want to burn this page? All secrets will be lost.")) {
       textarea.value = '';
       localStorage.removeItem(STORAGE_KEY);
+      currentFilePath = null;
+      markClean();
       textarea.focus();
+    }
+  });
+
+  // ---- KEYBOARD SHORTCUTS ----
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'o') { e.preventDefault(); openFile(); }
+    if (e.ctrlKey && e.key === 's') {
+      e.preventDefault();
+      if (e.shiftKey) saveFileAs(); else saveFile();
     }
   });
 

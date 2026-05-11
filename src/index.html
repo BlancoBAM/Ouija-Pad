@@ -19,9 +19,15 @@
   <!-- The Full Screen Notepad Application -->
   <main id="notepad-app">
     <header id="notepad-header">
-      <h1 id="title">Ouija Pad</h1>
+      <div id="header-left">
+        <h1 id="title">Ouija Pad</h1>
+        <span id="file-name"></span>
+      </div>
       <div id="controls">
-        <button id="btn-clear" class="control-btn" data-action="clear" title="Erase the page">BURN PAGE</button>
+        <button id="btn-open" class="control-btn" title="Open a text or markdown file (Ctrl+O)">⬡ OPEN SCROLL</button>
+        <button id="btn-save" class="control-btn" title="Save current file (Ctrl+S)">⬡ SEAL</button>
+        <button id="btn-save-as" class="control-btn" title="Save as new file (Ctrl+Shift+S)">⬡ INSCRIBE AS</button>
+        <button id="btn-clear" class="control-btn" data-action="clear" title="Erase the page">⬡ BURN PAGE</button>
       </div>
     </header>
     <div id="editor-container">

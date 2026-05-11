@@ -5,9 +5,9 @@
 **A gothic notepad with an immersive ouija board virtual keyboard**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tauri](https://img.shields.io/badge/Tauri-2.10.3-24c8db.svg)](https://tauri.app/)
+[![Tauri](https://img.shields.io/badge/Tauri-2.x-24c8db.svg)](https://tauri.app/)
 [![Platform: Linux](https://img.shields.io/badge/Platform-Linux-e95420.svg)](https://www.linux.org/)
-[![Build Status](https://github.com/BlancoBAM/ouija-pad/actions/workflows/build-release.yml/badge.svg)](https://github.com/BlancoBAM/ouija-pad/actions)
+[![Build & Release](https://github.com/BlancoBAM/Ouija-Pad/actions/workflows/build-release.yml/badge.svg)](https://github.com/BlancoBAM/Ouija-Pad/actions)
 
 </div>
 
@@ -15,216 +15,180 @@
 
 ## ✨ Overview
 
-Ouija Pad transforms your writing experience into something mystical. This distraction-free notepad features an interactive ouija board virtual keyboard where every keystroke brings the board to life—a planchette smoothly glides across the screen to pinpoint each character you channel.
+Ouija Pad transforms your writing experience into something mystical. This distraction-free notepad features an interactive ouija board virtual keyboard where every keystroke brings the board to life — a planchette smoothly glides across the screen to pinpoint each character you channel.
 
-Built with **Tauri** for native Linux performance, Ouija Pad delivers an atmospheric, gothic writing environment without the overhead of a web browser.
+Now a fully-featured text editor: open `.txt` and `.md` files, edit them, and save them back with native file dialogs. Built with **Tauri** for native Linux performance.
 
-![Ouija Pad Screenshot](src/ouija.webp)
+![Ouija Board](src/ouija.webp)
 
 ---
 
 ## 🔮 Features
 
-### Core Functionality
-- **Interactive Planchette Animation** — The pointer dynamically animates to the exact position for letters, numbers, and punctuation using precise coordinate mapping
-- **Dual Input Modes** — Click directly on the ouija board hotspots or type on your physical keyboard; the planchette responds either way
-- **Real-time Character Rendering** — Watch the planchette glide to each character as you type, with the same accuracy whether using physical or virtual input
-- **Persistent Local Storage** — Your writings are automatically saved to browser LocalStorage and restored on next launch
+### Text Editing
+- **Open & Save Files** — Native file dialogs for opening `.txt` / `.md` files and saving your work
+- **Save As** — Write to a new file at any time
+- **Unsaved-changes indicator** — A `•` appears next to the filename whenever there are unsaved edits
+- **Keyboard shortcuts** — `Ctrl+O` open, `Ctrl+S` save, `Ctrl+Shift+S` save as
+
+### Interactive Board
+- **Planchette Animation** — The pointer animates to the exact position for every letter, number, and punctuation mark using precise coordinate mapping
+- **Dual Input Modes** — Click board hotspots directly or type on your physical keyboard; the planchette responds either way
+- **Persistent Local Storage** — Content is auto-saved to LocalStorage and restored on next launch when no file is open
 
 ### Gothic Aesthetic
-- **Large Ouija Board Display** — The board occupies the lower 60% of the screen with a translucent, frosted-glass overlay effect
-- **Dark Ambient Styling** — Custom gothic fonts (Creepster, Special Elite), ambient purple mist gradients, and gold spirit highlights
-- **Smooth Animations** — Cubic-bezier transitions for planchette movement and keyboard dock interactions
-- **Burn Page Protocol** — Confirmation-gated page clearing that purges all stored content
-
-### User Experience
-- **Distraction-Free Writing** — Minimalist editor with no toolbars or menus to clutter your creative space
-- **Responsive Layout** — Adapts to different screen sizes while maintaining the ouija board's aspect ratio
-- **Keyboard Toggle** — Hide/show the ouija board with a single button when you need more writing space
+- **Dark Ambient Styling** — Custom gothic fonts (Creepster, Special Elite), ambient purple/gold gradients
+- **Smooth Animations** — Cubic-bezier planchette transitions and keyboard dock interactions
+- **Burn Page Protocol** — Confirmation-gated page clearing
 
 ---
 
 ## 📦 Installation
 
-### From Releases (Recommended)
+Download the latest release from the **[Releases page](https://github.com/BlancoBAM/Ouija-Pad/releases)**.
 
-Download the latest release from the [Releases page](https://github.com/BlancoBAM/ouija-pad/releases) and install:
-
-#### Debian/Ubuntu (.deb)
+### Debian / Ubuntu (.deb)
 ```bash
-sudo dpkg -i ouija-pad_*.deb
-sudo apt-get install -f  # Install dependencies if needed
+sudo dpkg -i ouija-pad_*_amd64.deb
+sudo apt-get install -f        # resolve dependencies if needed
 ```
 
-#### RPM-based (.rpm)
+### AppImage (any Linux distro)
 ```bash
-sudo rpm -i ouija-pad-*.rpm
-# or for Fedora
-sudo dnf install ouija-pad-*.rpm
+chmod +x Ouija-Pad_*_x86_64.AppImage
+./Ouija-Pad_*_x86_64.AppImage
 ```
-
-#### AppImage (Universal)
-```bash
-chmod +x Ouija_Pad_*.AppImage
-./Ouija_Pad_*.AppImage
-```
-
-### From Source
-
-```bash
-# Clone the repository
-git clone https://github.com/BlancoBAM/ouija-pad.git
-cd ouija-pad
-
-# Install Node.js dependencies
-npm install
-
-# Run in development mode
-npm run tauri:dev
-```
-
-### Build Production Packages
-
-```bash
-# Build release packages (.deb, .rpm, .AppImage)
-npm run tauri:build
-
-# Or use cargo directly for specific formats
-cd src-tauri
-cargo deb          # Build .deb package
-cargo generate-rpm # Build .rpm package
-```
-
-Built packages will be available in:
-- `.deb`: `src-tauri/target/debian/`
-- `.rpm`: `src-tauri/target/generate-rpm/`
-- `.AppImage`: `src-tauri/target/release/bundle/appimage/`
-
-### Desktop Integration
-
-After building/installing, the desktop launcher is automatically installed to:
-- `/usr/share/applications/ouija-pad.desktop`
-
-Icon installed to:
-- `/usr/share/icons/hicolor/128x128/apps/ouija-pad.png`
 
 ---
 
-## 🛠️ Technology Stack
+## 🛠️ Build from Source
 
-| Layer | Technology |
-|-------|------------|
-| **Frontend** | HTML5, CSS3, Vanilla JavaScript |
-| **Desktop Runtime** | Tauri 2.x (Rust + WebKit2GTK) |
-| **Fonts** | Creepster, Nosifer, Special Elite, Inter (Google Fonts) |
-| **Storage** | Browser LocalStorage |
-| **Packaging** | cargo-deb, cargo-generate-rpm, AppImage |
+### Prerequisites
+
+```bash
+# Rust toolchain
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+# System libraries (Debian/Ubuntu)
+sudo apt-get install -y \
+    libgtk-3-dev \
+    libwebkit2gtk-4.1-dev \
+    libappindicator3-dev \
+    librsvg2-dev \
+    libssl-dev \
+    pkg-config
+
+# Node.js 20+
+# https://nodejs.org
+```
+
+### Development
+
+```bash
+git clone https://github.com/BlancoBAM/Ouija-Pad.git
+cd Ouija-Pad
+npm install
+npm run tauri:dev
+```
+
+### Production Build
+
+```bash
+# Build .deb + AppImage
+npm run tauri:build -- --bundles deb,appimage
+
+# Packages land in:
+#   src-tauri/target/release/bundle/deb/
+#   src-tauri/target/release/bundle/appimage/
+```
 
 ---
 
 ## 🎮 Usage
 
-### Writing
-1. Launch Ouija Pad from your applications menu or via terminal: `ouija-pad`
-2. Start typing—watch the planchette glide to each character on the ouija board
-3. Click directly on board hotspots to input characters
-4. Use the control buttons (SPACE, DELETE, ENTER) for special actions
-
-### Managing Notes
-- **Auto-save**: All content is automatically persisted to LocalStorage
-- **Burn Page**: Click the button in the top-right to clear all content (with confirmation)
-
-### Keyboard Visibility
-- Click **▼ HIDE** to collapse the ouija board
-- Click **▲ OUIJA KEYBOARD** (bottom-right) to restore it
+| Action | Method |
+|---|---|
+| Open a file | `Ctrl+O` or **⬡ OPEN SCROLL** button |
+| Save current file | `Ctrl+S` or **⬡ SEAL** button |
+| Save to a new file | `Ctrl+Shift+S` or **⬡ INSCRIBE AS** button |
+| Clear the page | **⬡ BURN PAGE** button |
+| Hide/show ouija board | **▼ HIDE** / **▲ OUIJA KEYBOARD** |
+| Input via board | Click any letter, number, or symbol hotspot |
 
 ---
 
 ## 📁 Project Structure
 
 ```
-ouija-pad/
-├── src/                    # Frontend source files
-│   ├── index.html          # Main HTML structure
-│   ├── style.css           # Gothic styling and animations
-│   ├── script.js           # Planchette logic and input handling
-│   ├── ouija.webp          # Ouija board image asset
-│   └── README.md           # Frontend documentation
-├── src-tauri/              # Tauri backend (Rust)
+Ouija-Pad/
+├── src/                      # Frontend (HTML + CSS + JS)
+│   ├── index.html
+│   ├── style.css
+│   ├── script.js
+│   └── ouija.webp            # Ouija board image
+├── src-tauri/                # Tauri / Rust backend
 │   ├── src/
-│   │   ├── main.rs         # Rust entry point
-│   │   └── lib.rs          # Tauri application setup
-│   ├── capabilities/       # Tauri capability permissions
-│   ├── icons/              # Application icons
-│   ├── Cargo.toml          # Rust dependencies + packaging config
-│   ├── build.rs            # Build script
-│   └── tauri.conf.json     # Tauri configuration
+│   │   ├── main.rs
+│   │   └── lib.rs            # Tauri commands (open/save file)
+│   ├── capabilities/
+│   │   └── default.json
+│   ├── icons/                # Application icons (all sizes)
+│   ├── Cargo.toml
+│   ├── Cargo.lock
+│   ├── build.rs
+│   └── tauri.conf.json
 ├── .github/
 │   └── workflows/
-│       └── build-release.yml  # GitHub Actions CI/CD
-├── package.json            # Node.js dependencies and scripts
-├── ouija-pad.desktop       # Linux desktop launcher
-├── LICENSE                 # MIT License
-└── README.md               # This file
+│       └── build-release.yml # CI/CD pipeline
+├── package.json
+├── ouija-pad.desktop         # Linux desktop launcher
+├── LICENSE
+└── README.md
 ```
-
----
-
-## 🔀 Related Projects
-
-- **[Keyuijaboard](https://github.com/BlancoBAM/keyuijaboard)** — A floating, always-on-top version of the ouija keyboard for system-wide text input into any application
 
 ---
 
 ## 🚀 CI/CD
 
-This project uses GitHub Actions for automated builds and releases:
+GitHub Actions builds on every push to `main` and creates a GitHub Release on every version tag:
 
-- **On every push to `main`**: Builds all package formats as artifacts
-- **On version tags (`v*`)**: Creates a GitHub Release with `.deb`, `.rpm`, and `.AppImage` assets
+```bash
+git tag v1.2.0
+git push origin v1.2.0
+```
 
-Workflow: `.github/workflows/build-release.yml`
+The pipeline will produce and attach:
+- `ouija-pad_<version>_amd64.deb`
+- `Ouija-Pad_<version>_x86_64.AppImage`
+
+Workflow: [`.github/workflows/build-release.yml`](.github/workflows/build-release.yml)
 
 ---
 
-## 🐛 Troubleshooting
+## 🛠️ Technology Stack
 
-### Build Issues
-```bash
-# Clean and rebuild
-cd src-tauri
-cargo clean
-cd ..
-npm run tauri:build
-```
+| Layer | Technology |
+|---|---|
+| Frontend | HTML5, CSS3, Vanilla JavaScript |
+| Desktop Runtime | Tauri 2.x (Rust + WebKit2GTK) |
+| File I/O | `tauri-plugin-dialog` + `std::fs` |
+| Fonts | Creepster, Special Elite, Inter (Google Fonts) |
+| Storage | Browser LocalStorage (unsaved sessions) |
+| Packaging | Tauri bundler (.deb, AppImage) |
 
-### Missing Dependencies (Ubuntu/Debian)
-```bash
-sudo apt-get install -y \
-    libgtk-3-dev \
-    libwebkit2gtk-4.0-dev \
-    libappindicator3-dev \
-    librsvg2-dev \
-    libssl-dev
-```
+---
+
+## 🔀 Related Projects
+
+- **[Keyuijaboard](https://github.com/BlancoBAM/keyuijaboard)** — A floating, always-on-top version of the ouija keyboard for system-wide text input
 
 ---
 
 ## 📄 License
 
-**MIT License**
-
-Copyright (c) 2026 Lilith Linux Team
+**MIT License** — Copyright (c) 2026 Lilith Linux Team
 
 See [LICENSE](LICENSE) for full text.
-
----
-
-## 🙏 Acknowledgments
-
-- **Tauri Team** — For the excellent native desktop framework
-- **Google Fonts** — For the atmospheric typefaces
-- **Lilith Linux Community** — For inspiration and support
 
 ---
 
