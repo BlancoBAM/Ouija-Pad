@@ -1,25 +1,25 @@
 # Ouija Pad
 
 <div align="center">
+  <img src="src/logo.png" alt="Ouija Pad Logo" width="200">
 
-**A gothic notepad with an immersive ouija board virtual keyboard**
+  **The default notepad and text editor in Lilith Linux — a gothic writing experience with an immersive virtual keyboard**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tauri](https://img.shields.io/badge/Tauri-2.x-24c8db.svg)](https://tauri.app/)
-[![Platform: Linux](https://img.shields.io/badge/Platform-Linux-e95420.svg)](https://www.linux.org/)
-[![Build & Release](https://github.com/BlancoBAM/Ouija-Pad/actions/workflows/build-release.yml/badge.svg)](https://github.com/BlancoBAM/Ouija-Pad/actions)
-
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+  [![Tauri](https://img.shields.io/badge/Tauri-2.x-24c8db.svg)](https://tauri.app/)
+  [![Platform: Linux](https://img.shields.io/badge/Platform-Linux-e95420.svg)](https://www.linux.org/)
+  [![Build & Release](https://github.com/BlancoBAM/Ouija-Pad/actions/workflows/build-release.yml/badge.svg)](https://github.com/BlancoBAM/Ouija-Pad/actions)
 </div>
 
 ---
 
 ## ✨ Overview
 
-Ouija Pad transforms your writing experience into something mystical. This distraction-free notepad features an interactive ouija board virtual keyboard where every keystroke brings the board to life — a planchette smoothly glides across the screen to pinpoint each character you channel.
+Ouija Pad is the default text editor and notepad in Lilith Linux. It contains all the functions of a standard text editor or notepad, but transforms your writing experience into something mystical. This distraction-free notepad features an interactive ouija board virtual keyboard where every keystroke brings the board to life — a planchette smoothly glides across the screen to pinpoint each character you channel.
 
 Now a fully-featured text editor: open `.txt` and `.md` files, edit them, and save them back with native file dialogs. Built with **Tauri** for native Linux performance.
 
-![Ouija Board](src/ouija.webp)
+![Ouija Pad Screenshot](src/screenshot.png)
 
 ---
 
@@ -176,13 +176,9 @@ Workflow: [`.github/workflows/build-release.yml`](.github/workflows/build-releas
 | Storage | Browser LocalStorage (unsaved sessions) |
 | Packaging | Tauri bundler (.deb, AppImage) |
 
----
-
-## 🔀 Related Projects
-
-- **[Keyuijaboard](https://github.com/BlancoBAM/keyuijaboard)** — A floating, always-on-top version of the ouija keyboard for system-wide text input
 
 ---
+
 
 ## 📄 License
 
