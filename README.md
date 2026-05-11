@@ -1,14 +1,14 @@
 # Ouija Pad
 
 <div align="center">
+  <img src="src/logo.png" alt="Ouija Pad Logo" width="200">
 
-**A gothic notepad with an immersive ouija board virtual keyboard**
+  **A gothic notepad with an immersive ouija board virtual keyboard**
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tauri](https://img.shields.io/badge/Tauri-2.x-24c8db.svg)](https://tauri.app/)
-[![Platform: Linux](https://img.shields.io/badge/Platform-Linux-e95420.svg)](https://www.linux.org/)
-[![Build & Release](https://github.com/BlancoBAM/Ouija-Pad/actions/workflows/build-release.yml/badge.svg)](https://github.com/BlancoBAM/Ouija-Pad/actions)
-
+  [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+  [![Tauri](https://img.shields.io/badge/Tauri-2.x-24c8db.svg)](https://tauri.app/)
+  [![Platform: Linux](https://img.shields.io/badge/Platform-Linux-e95420.svg)](https://www.linux.org/)
+  [![Build & Release](https://github.com/BlancoBAM/Ouija-Pad/actions/workflows/build-release.yml/badge.svg)](https://github.com/BlancoBAM/Ouija-Pad/actions)
 </div>
 
 ---
@@ -19,7 +19,7 @@ Ouija Pad transforms your writing experience into something mystical. This distr
 
 Now a fully-featured text editor: open `.txt` and `.md` files, edit them, and save them back with native file dialogs. Built with **Tauri** for native Linux performance.
 
-![Ouija Board](src/ouija.webp)
+![Ouija Pad Screenshot](src/screenshot.png)
 
 ---
 
