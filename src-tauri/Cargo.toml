@@ -26,7 +26,7 @@ tauri-plugin-dialog = "2"
 [package.metadata.deb]
 maintainer = "Lilith Linux Team"
 copyright = "2026, Lilith Linux Team"
-license-file = ["LICENSE", "0"]
+license-file = ["../LICENSE", "0"]
 extended-description = """A distraction-free gothic notepad with an immersive \
 ouija board virtual keyboard. Features interactive planchette animation, \
 dual input modes (mouse and physical keyboard), and persistent local storage."""
@@ -36,12 +36,12 @@ priority = "optional"
 assets = [
     ["target/release/ouija-pad", "usr/bin/", "755"],
     ["../ouija-pad.desktop", "usr/share/applications/", "644"],
-    ["src-tauri/icons/128x128.png", "usr/share/icons/hicolor/128x128/apps/ouija-pad.png", "644"],
+    ["icons/128x128.png", "usr/share/icons/hicolor/128x128/apps/ouija-pad.png", "644"],
 ]
 
 [package.metadata.generate-rpm]
 assets = [
     { source = "target/release/ouija-pad", dest = "/usr/bin/ouija-pad", mode = "755" },
     { source = "../ouija-pad.desktop", dest = "/usr/share/applications/ouija-pad.desktop", mode = "644" },
-    { source = "src-tauri/icons/128x128.png", dest = "/usr/share/icons/hicolor/128x128/apps/ouija-pad.png", mode = "644" },
+    { source = "icons/128x128.png", dest = "/usr/share/icons/hicolor/128x128/apps/ouija-pad.png", mode = "644" },
 ]
